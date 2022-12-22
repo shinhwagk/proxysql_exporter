@@ -1,18 +1,15 @@
 import random
 import time
 
-from prometheus_client import start_http_server, Summary
+from prometheus_client import Summary, start_http_server
 from prometheus_client.core import REGISTRY
-
 
 from metrics import StatsMysqlCommandsCountersCollector
 
-
 REGISTRY.register(StatsMysqlCommandsCountersCollector())
 
-REQUEST_TIME = Summary('request_processing_seconds',
-                       'Time spent processing request')
 
+REQUEST_TIME = Summary('request_processing_seconds', 'Time spent processing request')
 
 @REQUEST_TIME.time()
 def process_request(t):
@@ -21,8 +18,7 @@ def process_request(t):
 
 
 if __name__ == '__main__':
-    # Start up the server to expose the metrics.
     start_http_server(8000)
-    # Generate some requests.
+    print("start.")
     while True:
         process_request(random.random())
