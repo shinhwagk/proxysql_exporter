@@ -1,2 +1,2 @@
-prometheus-client
-mysql-connector-python
+prometheus-client==0.15.0
+mysql-connector-python==8.0.31

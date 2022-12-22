@@ -19,6 +19,6 @@ def process_request(t):
 
 if __name__ == '__main__':
     start_http_server(8000)
-    print("start.")
+    print("info: proxysql_exporter is started, port:8000.")
     while True:
         process_request(random.random())
