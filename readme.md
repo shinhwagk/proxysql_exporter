@@ -6,5 +6,5 @@ export PROXYSQL_PASS=cadmin
 /usr/local/bin/python /workspaces/proxysql_exporter/main.py
 
 
-docker build -t shinhwagk/proxysql_exporter:0.0.2
+docker build -t shinhwagk/proxysql_exporter:0.0.2 .
 ```
