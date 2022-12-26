@@ -18,6 +18,6 @@ class StatsMysqlCommandsCountersCollector(object):
         for r in q.mysql_query('select * from stats_mysql_commands_counters'):
             r_command = r['Command']
             for k, v in list(r.items())[1:]:
-                c = CounterMetricFamily(f"{NAMESPACE}_stats_mysql_commands_counters", r_command, labels=['command','type'])
+                c = CounterMetricFamily(f"{NAMESPACE}_stats_mysql_commands_counters", r_command, labels=['command', 'type'])
                 c.add_metric([r_command, k.lower()], v)
                 yield c

@@ -11,6 +11,7 @@ REGISTRY.register(StatsMysqlCommandsCountersCollector())
 
 REQUEST_TIME = Summary('request_processing_seconds', 'Time spent processing request')
 
+
 @REQUEST_TIME.time()
 def process_request(t):
     """A dummy function that takes some time."""

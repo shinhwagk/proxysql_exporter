@@ -2,6 +2,6 @@
     "editor.formatOnSave": true,
     "editor.insertSpaces": true,
     "python.formatting.autopep8Args": [
-        "--line-length 120"
+        "--max-line-length=130"
     ]
 }
