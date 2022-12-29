@@ -1,3 +1,6 @@
+from datetime import datetime, timedelta
+import time
+
 from prometheus_client.core import CounterMetricFamily
 
 from query import Query
@@ -18,6 +21,31 @@ class StatsMysqlCommandsCountersCollector(object):
         for r in q.mysql_query('select * from stats_mysql_commands_counters'):
             r_command = r['Command']
             for k, v in list(r.items())[1:]:
-                c = CounterMetricFamily(f"{NAMESPACE}_stats_mysql_commands_counters", r_command, labels=['command', 'type'])
+                c = CounterMetricFamily(f"{NAMESPACE}_{self.name}", r_command, labels=['command', 'type'])
                 c.add_metric([r_command, k.lower()], v)
                 yield c
+
+
+class StatsMysqlQueryDigest(object):
+    """
+    stats_mysql_query_digest
+    """
+    name = "stats_mysql_query_digest"
+    labels = [
+        'hostgroup',
+        'schemaname',
+        "username",
+        "client_address",
+        "digest",
+        "metric"
+    ]
+
+    def collect(self):
+        ini_time_for_now = time.mktime(datetime.now().timetuple())
+        last_seen = int(ini_time_for_now - 3600)  # 86400
+        for r in q.mysql_query(f'select * from stats_mysql_query_digest where last_seen >= {last_seen}'):
+            for k, v in list(r.items()):
+                c = CounterMetricFamily(f"{NAMESPACE}_{self.name}", "", labels=self.labels)
+                if k in ['count_star', 'sum_time', 'sum_rows_affected', 'sum_rows_sent']:
+                    c.add_metric([r['hostgroup'], r['schemaname'], r['username'], r['client_address'], r['digest'], k], v)
+                    yield c

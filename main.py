@@ -4,10 +4,10 @@ import time
 from prometheus_client import Summary, start_http_server
 from prometheus_client.core import REGISTRY
 
-from metrics import StatsMysqlCommandsCountersCollector
+from metrics import StatsMysqlCommandsCountersCollector, StatsMysqlQueryDigest
 
 REGISTRY.register(StatsMysqlCommandsCountersCollector())
-
+REGISTRY.register(StatsMysqlQueryDigest())
 
 REQUEST_TIME = Summary('request_processing_seconds', 'Time spent processing request')
 
