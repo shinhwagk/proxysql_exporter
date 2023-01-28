@@ -6,7 +6,9 @@ export PROXYSQL_PASS=cadmin
 /usr/local/bin/python /workspaces/proxysql_exporter/main.py
 
 
-docker build -t shinhwagk/proxysql_exporter:0.0.3 .
+docker build --platform linux/amd64 -t shinhwagk/proxysql_exporter:0.0.4 .
+
+
 
 curl http://127.0.0.1:8000/metrics
 

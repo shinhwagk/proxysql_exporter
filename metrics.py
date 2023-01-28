@@ -18,12 +18,12 @@ class StatsMysqlCommandsCountersCollector(object):
     name = "stats_mysql_commands_counters"
 
     def collect(self):
+        c = CounterMetricFamily(f"{NAMESPACE}_{self.name}", "", labels=['command', 'type'])
         for r in q.mysql_query('select * from stats_mysql_commands_counters'):
             r_command = r['Command']
             for k, v in list(r.items())[1:]:
-                c = CounterMetricFamily(f"{NAMESPACE}_{self.name}", r_command, labels=['command', 'type'])
                 c.add_metric([r_command, k.lower()], v)
-                yield c
+        yield c
 
 
 class StatsMysqlQueryDigest(object):
@@ -42,9 +42,9 @@ class StatsMysqlQueryDigest(object):
     def collect(self):
         ini_time_for_now = time.mktime(datetime.now().timetuple())
         last_seen = int(ini_time_for_now - 3600)  # 86400
+        c = CounterMetricFamily(f"{NAMESPACE}_{self.name}", "", labels=self.labels)
         for r in q.mysql_query(f'select hostgroup, schemaname, username, digest, count_star, sum_time, sum_rows_affected, sum_rows_sent from stats_mysql_query_digest where last_seen >= {last_seen}'):
             for k, v in list(r.items()):
-                c = CounterMetricFamily(f"{NAMESPACE}_{self.name}", "", labels=self.labels)
                 if k in ['count_star', 'sum_time', 'sum_rows_affected', 'sum_rows_sent']:
                     c.add_metric([r['hostgroup'], r['schemaname'], r['username'], r['digest'], k], v)
-                    yield c
+        yield c
